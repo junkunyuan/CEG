@@ -1,0 +1,52 @@
+DATALOADER:
+  TRAIN_X:
+    SAMPLER: 'SeqDomainSampler'
+    BATCH_SIZE: 48 # 16 images per domain
+  TRAIN_U:
+    SAME_AS_X: True
+  TEST:
+    BATCH_SIZE: 100
+  NUM_WORKERS: 4
+
+OPTIM:
+  NAME: 'sgd'
+  LR: 0.003
+  MAX_EPOCH: 60
+  LR_SCHEDULER: 'cosine'
+
+TRAIN:
+  COUNT_ITER: 'train_u'
+  PRINT_FREQ: 10
+  DATA_MODE: 'random_all'   # no_random,random_class,random_all,dcenter
+
+TRAINER:
+  UPDATE_EPOCHS: [30, 35, 40, 45, 50, 55]
+  ADG:
+    STRONG_TRANSFORMS: ['random_flip', 'randaugment_fixmatch', 'normalize', 'cutout']
+    CC_OPTIM:
+      NAME: 'sgd'
+      LR: 0.01
+      MAX_EPOCH: 60
+      LR_SCHEDULER: 'cosine'
+    DC_OPTIM:
+      NAME: 'sgd'
+      LR: 0.01
+      MAX_EPOCH: 60
+      LR_SCHEDULER: 'cosine'
+    
+    SAVE_EPOCH: 30
+    CONSISTENCY: True
+    CLUSTER_P: 50
+    CLUSTER_STATIC: False
+    CLUSTER_EPOCH: 2
+    LARGER_R: 1.5
+    ALPHA: 0.3
+    BETA: [0.5, 0.5]
+
+    ALMETHOD: 'ours3'
+    USEDOMAIN: True
+    DIVERSITY: True
+    GAMMA: [0.6, 0.2, 0.2]
+    UNCERTAINTY: bvsb
+    DOMAINESS: confidence
+    DOMAINESS_FLIP: True
